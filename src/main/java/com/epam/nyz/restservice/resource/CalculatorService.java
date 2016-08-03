@@ -6,9 +6,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.epam.nyz.restservice.exception.InvalidExpressionWebException;
 import com.epam.nyz.restservice.model.CalculateResult;
 import com.epam.zoltannyaray.commandlinecalculator.Expression;
 import com.epam.zoltannyaray.commandlinecalculator.ExpressionBuilder;
+import com.epam.zoltannyaray.commandlinecalculator.InvalidExpressionException;
 import com.epam.zoltannyaray.commandlinecalculator.StandardOperatorPrecedenceProvider;
 
 @Path("/calculator")
@@ -28,9 +30,14 @@ public class CalculatorService {
     @Path("/calculate")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public CalculateResult calculate(@QueryParam("expression") String expressionString){
-        Expression expression = expressionBuilder.buildExpression(expressionString);
-        CalculateResult calculateResult = new CalculateResult(String.valueOf(expression.evaluate()));
-        return calculateResult;
+        try{
+            Expression expression = expressionBuilder.buildExpression(expressionString);
+            CalculateResult calculateResult = new CalculateResult(String.valueOf(expression.evaluate()));
+            return calculateResult;
+        }
+        catch (InvalidExpressionException e) {
+            throw new InvalidExpressionWebException(e);
+        }
     }
 
 }
