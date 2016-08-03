@@ -10,7 +10,6 @@
 	<properties>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.source>1.8</maven.compiler.source>
-		<glassfish.directory>C:/progs/glassfish4</glassfish.directory>
 	</properties>
 
 	<build>
@@ -21,49 +20,10 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>9.4.0.M0</version>
 				<configuration>
-					<webApp>
-						<contextPath>/rest-service</contextPath>
-					</webApp>
+					<httpConnector>
+						<port>8100</port>
+					</httpConnector>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.glassfish.maven.plugin</groupId>
-				<artifactId>maven-glassfish-plugin</artifactId>
-				<version>2.1</version>
-				<configuration>
-					<user>admin</user>
-					<adminPassword>admin</adminPassword>
-					<domain>
-						<name>domain1</name>
-						<adminPort>4848</adminPort>
-						<httpPort>8080</httpPort>
-						<httpsPort>8443</httpsPort>
-					</domain>
-					<glassfishDirectory>${glassfish.directory}</glassfishDirectory>
-					<domainDirectory>${glassfish.directory}/glassfish/domains</domainDirectory>
-					<components>
-						<component>
-							<name>rest-service</name>
-							<artifact>target/rest-service.war</artifact>
-						</component>
-					</components>
-				</configuration>
-				<executions>
-					<execution>
-						<id>glassfish-deploy</id>
-						<goals>
-							<goal>deploy</goal>
-						</goals>
-						<phase>package</phase>
-					</execution>
-					<execution>
-						<id>glassfish-undeploy</id>
-						<goals>
-							<goal>undeploy</goal>
-						</goals>
-						<phase>clean</phase>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
